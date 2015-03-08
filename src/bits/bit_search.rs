@@ -1,5 +1,8 @@
 use std::num::Int;
 
+#[doc="
+Finds the first set bit in an array of bits. Bits are represented by `words: [u64]`, 64 per elements in little-engian order, numbered from zero. Bit positions from `offset : usize`, inclusive, to `limit : usize`, exclusive, are considered. Returns None if no bits are set in considered range. Exceeding the bounds of the slice is undefined.
+"]
 pub fn find_first_one(words : &[u64], offset : usize, limit : usize) -> Option<usize> {
   let mut word_pos = offset >> 6;
   let word_limit = limit >> 6;
@@ -46,6 +49,9 @@ pub fn test_find_first_one_1() {
   assert_eq!(None, find_first_one(&bitarray,  51,  75));
 }
 
+#[doc="
+Finds the last set bit in an array of bits. Bits are represented by `words: [u64]`, 64 per elements in little-engian order, numbered from zero. Bit positions from `offset : usize`, inclusive, to `limit : usize`, exclusive, are considered. Returns None if no bits are set in considered range. Exceeding the bounds of the slice is undefined.
+"]
 pub fn find_last_one(words : &[u64], offset : usize, limit : usize) -> Option<usize> {
   let mut word_pos = limit >> 6;
   let start_bit_pos = limit & 0x3f;

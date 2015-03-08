@@ -1,4 +1,7 @@
 
+#[doc="
+Destructively copies an extent from one array of bits to another. Bits are represented by `[u64]`, 64 per element in little-engian order, numbered from zero. If `src` overlaps with `dst` in anyway, it is undefined. If the corresponding offset plus `count` exceeds the bounds of the `[u64]` slice, it is undefined.
+"]
 pub fn blit(src : &[u64], src_offset : usize, dst : &mut [u64], dst_offset : usize, count : usize) {
   let src_end_offset = src_offset + count;
   let dst_end_offset = dst_offset + count;
