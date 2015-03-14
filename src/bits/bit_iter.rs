@@ -28,7 +28,7 @@ impl <'a> Iterator for ForwardOnesIterator<'a> {
       }
       if(self.current_word == 0) { return None; }
     }
-    let b = self.current_word.trailing_zeros();
+    let b = self.current_word.trailing_zeros() as usize;
     self.current_word ^= 1u64 << b;
     return Some((self.word_pos << 6) + b);
   }

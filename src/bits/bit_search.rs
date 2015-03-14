@@ -12,14 +12,14 @@ pub fn find_first_one(words : &[u64], offset : usize, limit : usize) -> Option<u
   let end_mask = (1u64 << bit_limit) - 1;
   let first_word = words[word_pos] & start_mask & (if (word_pos == word_limit) { end_mask } else { !0u64 });
   if first_word != 0 {
-    return Some((word_pos << 6) + first_word.trailing_zeros());
+    return Some((word_pos << 6) + first_word.trailing_zeros() as usize);
   }
   if(word_pos == word_limit) { return None; }
   word_pos += 1;
   while(word_pos < word_limit) {
     let w = words[word_pos];
     if 0 != w {
-      return Some((word_pos << 6) + w.trailing_zeros());
+      return Some((word_pos << 6) + w.trailing_zeros() as usize);
     }
     word_pos += 1;
   }
@@ -27,7 +27,7 @@ pub fn find_first_one(words : &[u64], offset : usize, limit : usize) -> Option<u
     let end_mask = (1u64 << bit_limit) - 1;
     let last_word = words[word_limit] & end_mask;
     if 0 != last_word {
-      return Some((word_pos << 6) + last_word.trailing_zeros());
+      return Some((word_pos << 6) + last_word.trailing_zeros() as usize);
     }
   }
   return None;
@@ -62,7 +62,7 @@ pub fn find_last_one(words : &[u64], offset : usize, limit : usize) -> Option<us
   if start_bit_pos > 0 {
     let first_word = words[word_pos] & start_mask & (if (word_pos == word_bottom) { bottom_mask } else { !0u64 });
     if first_word != 0 {
-      return Some((word_pos << 6) + 63 - first_word.leading_zeros());
+      return Some((word_pos << 6) + 63 - first_word.leading_zeros() as usize);
     }
   }
   if word_pos == word_bottom {
@@ -72,14 +72,14 @@ pub fn find_last_one(words : &[u64], offset : usize, limit : usize) -> Option<us
   while word_pos > word_bottom {
     let w = words[word_pos];
     if 0 != w {
-      return Some((word_pos << 6) + 63 - w.leading_zeros());
+      return Some((word_pos << 6) + 63 - w.leading_zeros() as usize);
     }
     word_pos -= 1;
   }
   
   let last_word = words[word_bottom] & bottom_mask;
   if 0 != last_word {
-    return Some((word_pos << 6) + 63 - last_word.leading_zeros());
+    return Some((word_pos << 6) + 63 - last_word.leading_zeros() as usize);
   }
 
   return None;
