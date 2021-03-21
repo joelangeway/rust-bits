@@ -1,4 +1,3 @@
-use std::num::Int;
 
 #[doc="
 Finds the first set bit in an array of bits. Bits are represented by `words: [u64]`, 64 per elements in little-engian order, numbered from zero. Bit positions from `offset : usize`, inclusive, to `limit : usize`, exclusive, are considered. Returns None if no bits are set in considered range. Exceeding the bounds of the slice is undefined.
@@ -10,13 +9,13 @@ pub fn find_first_one(words : &[u64], offset : usize, limit : usize) -> Option<u
   let bit_limit = limit & 0x3f;
   let start_mask = !((1u64 << start_bit_pos) - 1);
   let end_mask = (1u64 << bit_limit) - 1;
-  let first_word = words[word_pos] & start_mask & (if (word_pos == word_limit) { end_mask } else { !0u64 });
+  let first_word = words[word_pos] & start_mask & (if word_pos == word_limit { end_mask } else { !0u64 });
   if first_word != 0 {
     return Some((word_pos << 6) + first_word.trailing_zeros() as usize);
   }
-  if(word_pos == word_limit) { return None; }
+  if word_pos == word_limit { return None; }
   word_pos += 1;
-  while(word_pos < word_limit) {
+  while word_pos < word_limit {
     let w = words[word_pos];
     if 0 != w {
       return Some((word_pos << 6) + w.trailing_zeros() as usize);
@@ -60,7 +59,7 @@ pub fn find_last_one(words : &[u64], offset : usize, limit : usize) -> Option<us
   let start_mask = (1u64 << start_bit_pos) - 1;
   let bottom_mask = !((1u64 << bit_bottom) - 1);
   if start_bit_pos > 0 {
-    let first_word = words[word_pos] & start_mask & (if (word_pos == word_bottom) { bottom_mask } else { !0u64 });
+    let first_word = words[word_pos] & start_mask & (if word_pos == word_bottom { bottom_mask } else { !0u64 });
     if first_word != 0 {
       return Some((word_pos << 6) + 63 - first_word.leading_zeros() as usize);
     }

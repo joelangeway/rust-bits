@@ -3,6 +3,6 @@
 name = "bits"
 version = "0.0.1"
 authors = ["Joe Langeway <joelangeway@gmail.com>"]
+edition = "2018"
 
 [dependencies]
-log = "0.2"

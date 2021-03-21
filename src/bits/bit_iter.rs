@@ -1,6 +1,5 @@
-use std::num::Int;
 
-use bits::bit_search::{find_first_one, find_last_one};
+use super::bit_search::{find_last_one};
 
 pub struct ForwardOnesIterator <'a> {
   pub words : &'a[u64],
@@ -14,19 +13,19 @@ impl <'a> Iterator for ForwardOnesIterator<'a> {
   type Item = usize;
 
   fn next(&mut self) -> Option<usize> {
-    if(self.current_word == 0) { 
-      if(self.word_pos >= self.word_limit) { return None; }
+    if self.current_word == 0 { 
+      if self.word_pos >= self.word_limit { return None; }
       self.word_pos += 1;
       self.current_word = self.words[self.word_pos];
-      while(self.word_pos < self.word_limit) {
+      while self.word_pos < self.word_limit {
         self.current_word = self.words[self.word_pos];
-        if(self.current_word != 0) { break; }
+        if self.current_word != 0 { break; }
         self.word_pos += 1;
       }
-      if(self.word_pos == self.word_limit) {
+      if self.word_pos == self.word_limit {
         self.current_word &= self.end_mask;
       }
-      if(self.current_word == 0) { return None; }
+      if self.current_word == 0 { return None; }
     }
     let b = self.current_word.trailing_zeros() as usize;
     self.current_word ^= 1u64 << b;
@@ -41,7 +40,7 @@ pub fn iter_ones<'a>(words : &'a[u64], offset : usize, limit : usize) -> Forward
   let word_start = offset >> 6;
   let bit_start = offset & 0x3f;
   let bit_limit = (limit - 1) & 0x3f;
-  let word_limit = ((limit - 1) >> 6);
+  let word_limit = (limit - 1) >> 6;
   let start_mask = !((1u64 << bit_start) - 1);
   let end_mask = if bit_limit == 63 { !0u64 } else {(1u64 << (1 + bit_limit)) - 1};
   ForwardOnesIterator { 
@@ -65,7 +64,7 @@ pub fn test_iter_ones_1() {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([100usize, 125, 150, 175], vec);
+  assert_eq!(vec![100usize, 125, 150, 175], vec);
 
   vec.clear();
   for i in iter_ones(&bitarray, 80, 201) {
@@ -74,7 +73,7 @@ pub fn test_iter_ones_1() {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([100usize, 125, 150, 175, 200], vec);
+  assert_eq!(vec![100usize, 125, 150, 175, 200], vec);
 
 
   vec.clear();
@@ -84,7 +83,7 @@ pub fn test_iter_ones_1() {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([0usize, 25, 50], vec);
+  assert_eq!(vec![0usize, 25, 50], vec);
 
   vec.clear();
   for i in iter_ones(&bitarray, 74, 76) {
@@ -93,7 +92,7 @@ pub fn test_iter_ones_1() {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([75usize], vec);
+  assert_eq!(vec![75usize], vec);
 
   vec.clear();
   for i in iter_ones(&bitarray, 128, 256) {
@@ -102,7 +101,7 @@ pub fn test_iter_ones_1() {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([150usize, 175, 200, 201], vec);
+  assert_eq!(vec![150usize, 175, 200, 201], vec);
 }
 
 pub struct BackwardOnesIterator <'a> {
@@ -142,26 +141,26 @@ pub fn test_backward_iter_ones_1() {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([175usize, 150, 125, 100], vec);
+  assert_eq!(vec![175usize, 150, 125, 100], vec);
 
   vec.clear();
   for i in backward_iter_ones(&bitarray, 0, 51) {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([50usize, 25, 0], vec);
+  assert_eq!(vec![50usize, 25, 0], vec);
 
   vec.clear();
   for i in backward_iter_ones(&bitarray, 74, 76) {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([75usize], vec);
+  assert_eq!(vec![75usize], vec);
 
   vec.clear();
   for i in backward_iter_ones(&bitarray, 128, 256) {
     println!("Found a one: {}", i);
     vec.push(i);
   }
-  assert_eq!([201usize, 200, 175, 150], vec);
+  assert_eq!(vec![201usize, 200, 175, 150], vec);
 }
